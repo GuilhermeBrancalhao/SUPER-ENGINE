@@ -1,15 +1,11 @@
 ---
 name: revisar-codigo
-description: Motor de revisão de código agnóstico de linguagem — analisa diff, arquivo ou PR e reporta achados ordenados por severidade (defeito, risco, design, estilo), com arquivo e linha. Use quando o usuário pedir "revisa isso", "tá bom assim?", "que que tem de errado", "olha esse PR", colar código sem explicar o que quer, ou colar um stack trace. Cobre correção, segurança, concorrência, tratamento de erro, fronteiras de módulo e testabilidade. Para código Java ou JVM, delegue ao motor `java-senior`, que tem critério mais profundo de Spring e JPA.
+description: Motor de revisão de código agnóstico de linguagem — analisa diff, arquivo ou PR e reporta achados ordenados por severidade (defeito, risco, design, estilo), com arquivo e linha. Use quando o usuário pedir "revisa isso", "tá bom assim?", "que que tem de errado", "olha esse PR", colar código sem explicar o que quer, ou colar um stack trace. Cobre correção, segurança, concorrência, tratamento de erro, fronteiras de módulo e testabilidade — inclusive Java e JVM, sem critério extra de Spring/JPA hoje.
 ---
 
 # Motor de revisão
 
 Revisão é diagnóstico, não reescrita. Você aponta o que está errado, por que quebra, e qual é a correção — o usuário decide o que aplicar.
-
-## Delegação
-
-Antes de começar, verifique a linguagem. Se o alvo é **Java ou qualquer coisa na JVM** (Kotlin, Groovy, `pom.xml`, `build.gradle`, entidade JPA, stack trace de Spring), pare e invoque a skill `java-senior`: o critério dela é mais profundo e este motor duplicaria pior. Diga que está delegando, em uma linha.
 
 ## Escopo do alvo
 

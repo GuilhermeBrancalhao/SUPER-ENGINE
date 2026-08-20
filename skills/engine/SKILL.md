@@ -263,6 +263,21 @@ aprovou na porta —, então trate-o como os outros destrutivos: pergunte antes.
 Os gates de risco R1–R9 valem **idênticos** em modo programa. Autonomia de processo não é
 autonomia de risco: com ninguém olhando, o gate vale mais, não menos.
 
+## Conhecimento — o backlog que aprende com os relatórios
+
+`CLI conhecimento {atualizar|status|revisar [ID]|pipeline|aprovar <ID>|rejeitar
+<ID> [motivo]|editar <ID> <novo_texto>}`. Camada separada dos ciclos e do
+programa: lê os relatórios já produzidos, extrai lacuna (achado crítico/alto
+que se repete) e propõe inserção de trecho em cartão real — nunca aplica
+sozinha. `atualizar` gera o backlog de lacunas a partir do relatório do ciclo
+atual; `revisar` (sem ID) lista as propostas de merge pendentes, com ID e
+confiança; `revisar <ID>` mostra o detalhe de uma proposta específica —
+trecho atual do cartão ao lado do texto sugerido; `aprovar`/`rejeitar`/`editar`
+decidem o destino de uma proposta pontual; `pipeline` roda `atualizar` e a
+geração de propostas em sequência e resume o que restou pendente. Nada aqui
+edita cartão sem `aprovar` — é o mesmo princípio da porta do plano, um andar
+abaixo: o motor propõe, o humano decide o que vira conhecimento permanente.
+
 ## Papéis
 
 Despache o subagente do papel correspondente à fase (`agents/`). Antes de despachar, leia

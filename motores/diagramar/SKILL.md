@@ -139,5 +139,7 @@ Sem preâmbulo. Sem "deixa eu desenhar".
 
 ## Referências
 
-- `references/notacao-mermaid.md` — sintaxe de cada notação, armadilhas de renderização, exemplos prontos para copiar.
-- `references/c4-por-pergunta.md` — qual nível C4 responde qual pergunta, o que entra e o que fica de fora em cada nível, quando parar.
+Este motor ainda não tem `references/` próprio — as duas leituras que valeriam a
+pena (sintaxe de cada notação Mermaid com armadilhas de renderização; qual nível
+C4 responde qual pergunta) ficam para quando alguém as escrever. Até lá, use o
+que já está acima e a sintaxe Mermaid padrão.

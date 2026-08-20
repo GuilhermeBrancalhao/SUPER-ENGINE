@@ -79,7 +79,7 @@ marcado `PRONTO` enquanto a fonte dizia `RASCUNHO`, e a nunca entregar `03-DISCO
 As duas suítes rodam separadas, porque cada uma tem o seu próprio pacote `ferramentas`:
 
 ```bash
-py -m pytest                  # motor  — 478 testes
+py -m pytest                  # motor  — 844 testes
 cd acervo && py -m pytest     # acervo — 789 testes
 ```
 
@@ -189,7 +189,7 @@ a cada push — antes disso não havia CI nenhuma, e "os testes passam" era uma
 afirmação sobre a última vez que alguém os rodou à mão.
 
 ```bash
-py -m pytest                                   # motor          — 478 testes
+py -m pytest                                   # motor          — 844 testes
 cd acervo && py -m pytest                      # acervo         — 789 testes
 py -m pytest acervo-controladoria/exemplos     # controladoria  —  33 testes
 ```
@@ -246,7 +246,24 @@ concorrente com uma transição de fase de outra sessão.
 Claude Code atravessando auto-compactação. O que sobra de resíduo, porém, é o **contrato do
 Claude Code** (disparar `PreCompact`, preservar o `cwd`), não o motor.
 
-Também pendente: os quatro cenários de aceite com projetos-cobaia. O lançador
+**Desde então: Fase 4 e dois programas reais, com prova por execução.** O motor
+ganhou uma camada acima do ciclo — `programa`, que encadeia uma sequência de
+ciclos com dependência, porta única de aprovação e aceite de sistema — ver
+`docs/specs/2026-08-05-engine-fase-4-programa.md` e `aceite/fase-4.md`. Sobre
+essa camada rodaram dois programas de verdade: o primeiro ligou o catálogo de
+37 lacunas de elicitação (que existia como exemplo didático no acervo,
+desligado da máquina) aos dois gates de fase — hoje é `descoberta`/`programa
+descoberta` neste README; o segundo trocou o veredito de ciclo de **digitado**
+(`programa aceite <C> ok`) para **decidido pelo código de saída** de um
+comando real (`programa verificar <C>`), com prova em `aceite/fase-5.md`: um
+projeto-cobaia (calculadora de folha CLT) onde um ciclo reprovou de verdade,
+bloqueou o dependente, e só o conserto seguido de nova verificação destravou o
+programa. Isso substitui a frase abaixo — os cenários de aceite com
+projeto-cobaia deixaram de ser pendência.
+
+Também pendente: os quatro cenários de aceite com projetos-cobaia da Fase 3
+original (instalação e ciclo único de ponta a ponta numa sessão real, fora
+deste repositório). O lançador
 (`hooks/engine.sh`) tem suíte automatizada (`ferramentas/tests/test_lancador.py`) cobrindo os
 cenários de PATH via subprocesso, mas **nunca rodou numa máquina macOS ou Linux de verdade** —
 só sob Git Bash no Windows, onde a forma shell também roda.
@@ -255,10 +272,11 @@ só sob Git Bash no Windows, onde a forma shell também roda.
 
 | | |
 |---|---|
-| Especificação de desenho | `docs/specs/2026-07-30-engine-design.md` |
+| Especificação de desenho (Fases 1-3) | `docs/specs/2026-07-30-engine-design.md` |
+| Especificação do modo PROGRAMA (Fase 4) | `docs/specs/2026-08-05-engine-fase-4-programa.md` |
 | Plano de implementação | `docs/plans/` |
 | Histórico e decisões | `CHANGELOG.md` |
-| Registros de aceite | `aceite/` |
+| Registros de aceite | `aceite/` (`fase-1` a `fase-5`) |
 
 A especificação explica cada decisão com a alternativa que foi descartada e a razão. Se você
 for mexer no classificador de risco, leia a seção 5 antes — ela documenta por que a política

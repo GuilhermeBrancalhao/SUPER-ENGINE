@@ -146,5 +146,8 @@ Documento o ganho. "Antes era X, agora é Y" em algum lugar — relatório, ADR,
 
 ## Referências
 
-- `references/profiling-por-linguagem.md` — ferramenta de medição apropriada para cada plataforma (perf, jdwp, py-spy, pprof), como interpretar saída, armadilhas comuns.
-- `references/padroes-de-otimizacao.md` — 20+ padrões com exemplo, antes/depois, ordem de ganho típica.
+Este motor ainda não tem `references/` próprio — o mapa de ferramenta de
+medição por plataforma (perf, jdwp, py-spy, pprof) e o catálogo de padrões de
+otimização com antes/depois ficam para quando alguém os escrever. Até lá, a
+escolha de ferramenta de profiling fica a critério de quem conduz a fase,
+guiada pela stack real do projeto.

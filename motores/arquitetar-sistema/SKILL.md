@@ -92,7 +92,7 @@ Quando a decisão depende de dado que você não tem — volume, latência atual
 
 ## Registrar
 
-Decisão estrutural sai em ADR. Formato em `references/decisoes-e-adr.md`. Curto: contexto, decisão, alternativas descartadas com o motivo, consequências aceitas.
+Decisão estrutural sai em ADR curto: contexto, decisão, alternativas descartadas com o motivo, consequências aceitas.
 
 A seção que mais importa é **alternativas descartadas** — é o que impede a discussão de recomeçar do zero daqui a um ano.
 
@@ -118,5 +118,7 @@ Sem preâmbulo. Sem "excelente pergunta".
 
 ## Referências
 
-- `references/decisoes-e-adr.md` — o que merece ADR, formato, e como registrar alternativa descartada de forma útil.
-- `references/fronteiras-e-acoplamento.md` — sinais concretos de acoplamento errado, com o teste que revela cada um e a correção incremental.
+Este motor ainda não tem `references/` próprio — o detalhamento de quando um
+ADR se justifica e o catálogo de sinais de acoplamento errado (com o teste que
+revela cada um) ficam para quando alguém os escrever. Até lá, a seção "ADR" ali
+em cima é o guia real.
