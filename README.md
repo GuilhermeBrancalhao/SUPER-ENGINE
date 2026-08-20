@@ -38,17 +38,22 @@ não recebe ferramenta de execução), não uma instrução que ele possa contra
 **Doze cartões de tecnologia**, carregados sob demanda conforme a stack detectada no projeto.
 Tecnologia nova custa um arquivo de ~60 linhas, não um agente novo.
 
-**Cinco motores de critério** em `motores/` — `revisar-codigo`, `otimizar-performance`,
-`arquitetar-sistema`, `materializar-ideia`, `diagramar`. O cartão de cada turno lista os
-motores consultáveis da fase atual (nome + `description` do `SKILL.md` de cada um):
+**Seis motores consultáveis**, de duas naturezas diferentes: cinco motores de critério
+próprios, em `motores/` — `revisar-codigo`, `otimizar-performance`, `arquitetar-sistema`,
+`materializar-ideia`, `diagramar` —, mais `gauntlet-loop`, uma **entrada-ponteiro** para uma
+skill externa (instalada à parte no ambiente de quem conduz o ciclo, não mantida por este
+repositório) que, consultada em REVISAO e DOC, acrescenta crítica cega contra barra externa
+quando o entregável já passa em teste e critério funcional mas a qualidade em si precisa ser
+medida. O cartão de cada turno lista os motores consultáveis da fase atual (nome +
+`description` do `SKILL.md` de cada um):
 
 | Fase | Motores consultáveis |
 |---|---|
 | PLANO | `arquitetar-sistema`, `materializar-ideia` |
 | EVOLUÇÃO | `arquitetar-sistema` |
 | BUILD | `materializar-ideia`, `revisar-codigo` |
-| REVISÃO | `revisar-codigo`, `otimizar-performance` |
-| DOC | `diagramar` |
+| REVISÃO | `revisar-codigo`, `otimizar-performance`, `gauntlet-loop` |
+| DOC | `diagramar`, `gauntlet-loop` |
 
 Fora de DESCOBERTA e ANÁLISE, o hook também analisa o `git diff` local e, quando o padrão do
 código pede um motor específico, acrescenta a sugestão ao cartão.

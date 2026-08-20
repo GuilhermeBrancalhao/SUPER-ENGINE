@@ -101,6 +101,60 @@ def test_monta_cartao_na_fase_plano(tmp_path):
     assert len(cartao.split("\n")) <= 50
 
 
+def test_gauntlet_loop_e_consultavel_em_revisao(tmp_path):
+    """O motor gauntlet-loop aparece no cartão da fase REVISAO, junto dos motores
+    de critério já existentes -- regra fixa em MOTORES_POR_FASE, não decisão do
+    modelo em tempo de execução."""
+    raiz = criar_estrutura_teste(tmp_path)
+
+    dados = {
+        "ativo": True,
+        "ciclo": {"id": "test-cycle", "objetivo": "Testar gauntlet-loop", "modo": "normal"},
+        "fase": "REVISAO",
+        "cartoes": ["python"],
+        "decisoes": [],
+        "diffs_pendentes": [],
+    }
+    cfg = {"teto_cartao_linhas": 50}
+
+    cartao = hook.montar_cartao_estendido(dados, cfg, raiz, str(raiz))
+
+    assert "gauntlet-loop" in cartao
+    assert "revisar-codigo" in cartao
+    assert "otimizar-performance" in cartao
+
+
+def test_gauntlet_loop_e_consultavel_em_doc(tmp_path):
+    """O motor gauntlet-loop aparece no cartão da fase DOC, junto de diagramar."""
+    raiz = criar_estrutura_teste(tmp_path)
+
+    dados = {
+        "ativo": True,
+        "ciclo": {"id": "test-cycle", "objetivo": "Testar gauntlet-loop", "modo": "normal"},
+        "fase": "DOC",
+        "cartoes": ["python"],
+        "decisoes": [],
+        "diffs_pendentes": [],
+    }
+    cfg = {"teto_cartao_linhas": 50}
+
+    cartao = hook.montar_cartao_estendido(dados, cfg, raiz, str(raiz))
+
+    assert "gauntlet-loop" in cartao
+    assert "diagramar" in cartao
+
+
+def test_motor_gauntlet_loop_tem_skill_md_real():
+    """O SKILL.md real do motor (não o de teste) existe na árvore do plugin e
+    declara `name`/`description` -- é o arquivo que o hook lê em produção."""
+    skill_path = RAIZ_PLUGIN / "motores" / "gauntlet-loop" / "SKILL.md"
+    assert skill_path.exists()
+
+    conteudo = skill_path.read_text(encoding="utf-8")
+    assert "name: gauntlet-loop" in conteudo
+    assert "description:" in conteudo
+
+
 def test_respeita_teto_em_build(tmp_path):
     """Teto de 50 linhas é respeitado mesmo com corpo cheio."""
     raiz = criar_estrutura_teste(tmp_path)

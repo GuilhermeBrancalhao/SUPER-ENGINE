@@ -82,8 +82,8 @@ MOTORES_POR_FASE = {
     "EVOLUCAO": ["arquitetar-sistema"],
     "BUILD": ["materializar-ideia", "revisar-codigo"],
     "TESTE": [],
-    "REVISAO": ["revisar-codigo", "otimizar-performance"],
-    "DOC": ["diagramar"],
+    "REVISAO": ["revisar-codigo", "otimizar-performance", "gauntlet-loop"],
+    "DOC": ["diagramar", "gauntlet-loop"],
     "ENTREGA": [],
 }
 

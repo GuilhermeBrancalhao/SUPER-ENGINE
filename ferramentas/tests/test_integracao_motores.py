@@ -33,6 +33,7 @@ class TestCarregamentoMotores:
         assert engine_vivo.MOTORES_POR_FASE["REVISAO"] == [
             "revisar-codigo",
             "otimizar-performance",
+            "gauntlet-loop",
         ]
         assert engine_vivo.MOTORES_POR_FASE["BUILD"] == [
             "materializar-ideia",
