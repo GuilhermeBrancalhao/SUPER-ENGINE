@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 04-Arquitetura
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Arquitetura
@@ -28,7 +28,7 @@ C4Context
     Rel(banco, analista, "Exporta CSV de comissao")
     Rel(analista, normalizador, "Executa normalizar.py")
     Rel(normalizador, conciliacao, "Entrega modelo PROCESSADO, 36 colunas")
-    Rel(erp, conector_erp, "Exporia dado via API")
+    Rel(erp, conector_erp, "Exportaria dado via API")
     Rel(conector_erp, conciliacao, "Entregaria o mesmo contrato de saida")
 ```
 

@@ -12,9 +12,13 @@ atualizado_em: 2026-08-03
 Antes de considerar este volume pronto para uso em produção — não confundir com a Definição de
 PRONTO do acervo, tratada em `16-Roadmap.md` e em `00-INTRODUCAO/Convencoes.md`:
 
-- [x] Os cinco módulos existem, são puros (sem I/O) e têm teste próprio.
-- [x] O teste de fluxo completo cobre a composição na ordem real de uso.
-- [x] Cada invariante de `07-Regras.md` tem pelo menos um teste que falha se for violada.
+- [x] Os cinco módulos existem, as funções de decisão são puras (sem I/O), `guarda`/`trilha`
+      mutam só estado em memória, e todos têm teste próprio.
+- [x] O teste de fluxo completo cobre a composição na ordem real de uso, incluindo o ramo de
+      confiança MEDIA/BAIXA (não escreve) e a segunda execução (guarda nova, trilha antiga).
+- [x] Cada invariante de `07-Regras.md` que o motor pode de fato violar tem teste que falha se
+      for violada. "Título aberto sempre vence lançamento novo" não tem teste possível porque
+      o motor não expõe função de criação de lançamento avulso — não há o que a regra proíba.
 - [x] Nenhum módulo referencia banco, ERP, cliente ou credencial específicos.
 - [x] Os três diagramas exigidos pelo tipo `ENGINE` (contexto, sequência, estados) existem e têm
       parágrafo descritivo logo depois.

@@ -17,8 +17,16 @@
 | `vbnet` | arquiteto, implementador, testador, revisor | 2 |
 | `fsharp` | arquiteto, implementador, testador, revisor | 2 |
 | `mermaid` | arquiteto, documentador | 2 |
+| `openpyxl-xlwings` | arquiteto, implementador, revisor | 3 |
+| `ui-ux-producao` | arquiteto, designer, implementador, revisor | 3 |
 
-Elenco completo: 15 cartões. Os `papeis` de `pytest` e `ui-ux` foram revisados na Fase 2
+Elenco completo: 17 cartões. `openpyxl-xlwings` tem `detectar: []` de propósito — não existe
+âncora forte de arquivo para "este projeto usa openpyxl/xlwings" (ver a nota no próprio
+cartão), então ele nunca dispara sozinho; o `cartografo` carrega à mão quando confirma
+manipulação de Excel real na ANÁLISE. `ui-ux-producao` reusa o `detectar:` de `ui-ux` — os
+dois co-carregam sempre juntos, de propósito (piso de acessibilidade + qualidade de produção).
+
+Os `papeis` de `pytest` e `ui-ux` foram revisados na Fase 2
 (adicionado `testador` em `pytest` e `designer` em `ui-ux`, coerente com o que já valia para
 os cartões novos de teste e de interface).
 

@@ -4,7 +4,7 @@ volume_nome: CONCILIACAO-CONTAS
 tipo: ENGINE
 secao: 10-Anti-Patterns
 status: RASCUNHO
-atualizado_em: 2026-08-03
+atualizado_em: 2026-08-20
 ---
 
 # Anti-Patterns
@@ -36,8 +36,10 @@ detalha a correção.
 
 **Misturar chamada de rede dentro da lógica de decisão.** Um módulo que consulta API dentro da
 mesma função que decide se casa ou não só pode ser testado com mock de rede — e mock de rede
-tende a divergir do comportamento real do sistema externo com o tempo. Os cinco módulos deste
-volume são puros de propósito; a integração fica inteiramente em `54-INTEGRACAO-ERP`.
+tende a divergir do comportamento real do sistema externo com o tempo. Nenhuma função de
+decisão deste volume toca rede, disco ou relógio — `guarda.registrar()` e `trilha.registrar()`
+mutam estado em memória por desenho (ver `03-Escopo.md`/`09-Boas-Praticas.md`), mas isso não é
+I/O externo; a integração de fato fica inteiramente em `54-INTEGRACAO-ERP`.
 
 **Elevar a confiança na ausência de evidência.** Um motor que assume "sem dado histórico,
 confio do mesmo jeito" inverte a garantia de degradação segura — e é exatamente o oposto do que

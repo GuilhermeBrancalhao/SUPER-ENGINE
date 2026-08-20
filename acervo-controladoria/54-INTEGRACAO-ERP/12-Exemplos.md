@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 12-Exemplos
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Exemplos Práticos

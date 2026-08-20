@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 07-Regras
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Regras
@@ -25,6 +25,12 @@ atualizado_em: 2026-08-04
   contagem de linha bater, proposta sem duplicata, coluna de comissão não pode ficar vazia —
   porque silêncio (coluna errada escolhida, valor `None`) é mais perigoso que erro explícito;
   coberto por `test_validar_trava_se_coluna_de_comissao_ficar_vazia`.
+- **Data de banco brasileiro é dd/mm/aaaa, nunca mm/dd/aaaa.** `pd.to_datetime()` sem
+  `dayfirst=True` assume o formato americano por padrão: dia e mês trocados em silêncio para
+  dia ≤ 12, `ValueError` (e detecção de coluna abortada) para dia > 12 — ou seja, praticamente
+  todo CSV cobrindo um mês real de movimento. A MESMA opção `dayfirst=True` tem de valer tanto
+  na detecção de coluna quanto na gravação final em `DAT_CREDITO`; achado de auditoria
+  2026-08-20, coberto por `test_dat_credito_nao_troca_dia_por_mes`.
 - **dtype `str` nativo do pandas recente não é o `object` clássico.** Um filtro que checa
   `dtype == object` para decidir se vale a pena tentar converter texto deixa passar batido uma
   coluna com esse dtype mais novo, e ela vira `NaN` sem aviso — `_para_numerico()` evita esse

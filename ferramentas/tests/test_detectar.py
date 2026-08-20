@@ -83,9 +83,10 @@ def test_os_quinze_cartoes_do_elenco_completo_sao_validos():
         "fastapi", "excel-vba", "office-scripts", "power-query", "react",
         "typescript", "postgresql", "sqlite", "mermaid",
         "csharp", "vbnet", "fsharp",
+        "openpyxl-xlwings", "ui-ux-producao",
     }
-    assert len(cartoes) == 15, (
-        f"esperava 15 cartões em cartoes/, achou {len(cartoes)}: "
+    assert len(cartoes) == 17, (
+        f"esperava 17 cartões em cartoes/, achou {len(cartoes)}: "
         f"{sorted(c.name for c in cartoes)}"
     )
 

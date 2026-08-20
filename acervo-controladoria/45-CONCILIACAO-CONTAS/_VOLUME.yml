@@ -15,7 +15,7 @@
 volume: "45"
 nome: CONCILIACAO-CONTAS
 tipo: ENGINE
-status: RASCUNHO
+status: PRONTO
 perecivel: false
 depende_de: []
 escopo: Motor de reconciliacao entre extrato bancario e sistema contabil -- ancora de saldo, casamento de movimento contra titulo aberto, classificacao de confianca, guarda contra escrita duplicada e trilha de auditoria.

@@ -37,8 +37,12 @@ telas.
 
 ## Fronteira deliberada
 
-O motor não faz retry de rede, não lê arquivo, não chama API — todas as cinco funções públicas
-citadas em `exemplos/45-conciliacao-contas/` são puras, recebem estrutura de dados e devolvem
-estrutura de dados, sem efeito colateral de I/O. Isso é proposital: mistura entre lógica de
+O motor não faz retry de rede, não lê arquivo, não chama API — nenhuma das funções e métodos
+de `exemplos/45-conciliacao-contas/` toca rede, disco ou relógio de parede. As funções de
+*decisão* (`achar_ancora`, `casar`, `similaridade`, `classificar`) são puras: recebem estrutura
+de dados e devolvem estrutura de dados, sem mutar nada. `guarda.registrar()` e
+`trilha.registrar()` são a exceção deliberada — mutam estado *em memória* (ver
+`09-Boas-Praticas.md`), nunca I/O externo; é essa distinção, não "tudo é puro", que a fronteira
+deste volume protege. Isso é proposital: mistura entre lógica de
 decisão e chamada de rede é a razão mais comum pela qual motores de conciliação viram
 impossíveis de testar sem ambiente externo, tema aprofundado em `10-Anti-Patterns.md`.

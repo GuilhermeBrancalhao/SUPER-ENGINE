@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 09-Boas-Praticas
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Boas Práticas
@@ -35,4 +35,5 @@ antes de tocar no código de detecção.
 **Rodar contra CSV real de produção antes de confiar num banco novo.** Um teste sintético, como
 os de `test_normalizar.py`, prova a lógica de decisão — mas não reproduz peculiaridade real de
 encoding, separador ou BOM que só aparece no arquivo de fato exportado pelo banco, como o caso
-ainda pendente descrito em `12-Exemplos.md`.
+do DIGIO descrito em `12-Exemplos.md` (já corrigido em 2026-08-04, mas que só apareceu porque
+alguém rodou contra o arquivo real).

@@ -4,43 +4,49 @@ volume_nome: CONCILIACAO-CONTAS
 tipo: ENGINE
 secao: 05-Diagramas
 status: RASCUNHO
-atualizado_em: 2026-08-03
+atualizado_em: 2026-08-20
 ---
 
 # Diagramas
 
 ```mermaid
 sequenceDiagram
-    participant Op as Operador
+    participant Op as Operador/orquestrador
     participant Anc as ancora.py
     participant Cas as casamento.py
     participant Conf as confianca.py
     participant Grd as guarda.py
     participant Tri as trilha.py
 
-    Anc->>Anc: achar_ancora(saldo, movimentos, saldos_banco)
+    Op->>Anc: achar_ancora(saldo_inicial, data_inicial, movimentos, saldos_banco)
     Anc-->>Op: dia fechado no centavo (ou None)
-    Cas->>Cas: casar(movimento, titulos_abertos)
-    Cas-->>Conf: titulo casado (ou None)
-    Conf->>Conf: classificar(evidencia)
+    Op->>Cas: casar(movimento, titulos_abertos)
+    Cas-->>Op: titulo casado (ou None)
+    Op->>Conf: classificar(evidencia)
+    Conf-->>Op: ALTA, MEDIA ou BAIXA
     alt confianca ALTA
-        Conf->>Grd: ja_registrado(chave)?
-        Grd-->>Conf: nao
-        Conf->>Tri: registrar(chave, usuario, quando, acao)
+        Op->>Grd: ja_registrado(chave)?
+        Grd-->>Op: nao
+        Op->>Tri: registrar(chave, usuario, quando, acao)
         Tri-->>Op: escrita confirmada
     else confianca MEDIA ou BAIXA
-        Conf-->>Op: pendencia para revisao humana
+        Op-->>Op: pendencia para revisao humana (guarda/trilha nunca chamadas)
     end
 ```
 
-A sequência mostra a ordem real de chamada dentro de um ciclo de conciliação: a âncora roda
-primeiro e de forma independente do restante — ela responde "os saldos batem no geral?", não
-"este movimento específico casa com o quê?". Casamento e confiança rodam por movimento, e só
-depois de a confiança classificar como ALTA é que guarda e trilha entram, nessa ordem — a
-guarda é consultada antes de qualquer escrita, e só se a chave for nova é que a trilha registra.
-Quando a confiança fica em MEDIA ou BAIXA, o fluxo nunca chega a guarda ou trilha: a decisão
-correta é não escrever, e devolver a pendência para revisão humana, comportamento coberto pelo
-teste `test_fluxo_nao_escreve_quando_confianca_e_baixa`.
+A sequência mostra a ordem real de chamada dentro de um ciclo de conciliação, com o
+**orquestrador** (quem compõe os cinco módulos — `test_fluxo_completo.py` no exemplo) como o
+único participante que chama os outros: nenhum módulo importa ou chama outro diretamente (ver
+`04-Arquitetura.md`), então nenhuma seta parte de `Cas`, `Conf`, `Grd` ou `Tri` para outro
+módulo. A âncora roda primeiro e de forma independente do restante — ela responde "os saldos
+batem no geral?", não "este movimento específico casa com o quê?" — e recebe também
+`data_inicial_conhecida`, o parâmetro que ancora *quando* o saldo inicial valia (ver
+`08-Modelos.md`). Casamento e confiança rodam por movimento, e só depois de a confiança
+classificar como ALTA é que guarda e trilha entram, nessa ordem. Quando a confiança fica em
+MEDIA ou BAIXA, o fluxo nunca chega a guarda ou trilha — comportamento coberto por
+`test_fluxo_nao_escreve_quando_confianca_e_media`, que testa exatamente este ramo (o
+teste `..._quando_confianca_e_baixa_por_falta_de_titulo` cobre um ramo diferente: quando não há
+título candidato nenhum por valor).
 
 ## Entidades e relação
 

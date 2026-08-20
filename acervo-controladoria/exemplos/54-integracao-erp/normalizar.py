@@ -17,6 +17,16 @@ from pathlib import Path
 from datetime import datetime
 import argparse
 
+# Console do Windows nao roda em UTF-8 por padrao (cp1252/cp850) -- os emojis
+# nos prints deste modulo levantavam UnicodeEncodeError mesmo para quem so
+# importa a classe (ex.: `from normalizar import Normalizador; n.ler_csv()`),
+# nao so para quem roda via CLI. Achado de auditoria 2026-08-20: a correcao
+# anterior vivia so dentro de main() e nao protegia esse caminho. errors=
+# 'replace' garante que a normalizacao em si nunca falha por causa de print.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+
 class Normalizador:
     """Converte CSV de banco para modelo PROCESSADO padrão."""
 
@@ -259,12 +269,17 @@ class Normalizador:
             col_lower = col.lower()
             if any(x in col_lower for x in ['data', 'date', 'dt.', 'data_']):
                 # Tentar converter para data
+                # dayfirst=True: banco brasileiro exporta dd/mm/aaaa, e sem isso
+                # pandas assume mm/dd/aaaa por padrao -- dia e mes trocados em
+                # silencio para dia<=12, e ValueError para dia>12 (achado de
+                # auditoria 2026-08-20: qualquer arquivo cobrindo um mes real
+                # tem dia >12 em alguma linha e a deteccao falhava).
                 try:
-                    pd.to_datetime(self.df_original[col])
+                    pd.to_datetime(self.df_original[col], dayfirst=True)
                     self.deteccoes['data'] = col
                     print(f"  ✓ Data: {col}")
                     break
-                except:
+                except (ValueError, TypeError):
                     pass
 
         # Detectar PROPOSTA (ID único)
@@ -278,7 +293,19 @@ class Normalizador:
                     break
 
         # Detectar VALOR BRUTO
+        # Exclui explicitamente a(s) coluna(s) ja usada(s) por COMISSAO: a mesma
+        # coluna casando em duas deteccoes deixaria VAL_BRUTO == VAL_COMISSAO em
+        # silencio (achado de auditoria 2026-08-20) -- ambas colunas frequentemente
+        # tem "valor"/"vl" no nome.
+        # Exclui TODAS as colunas candidatas a comissao (nao so as duas que
+        # deteccoes rastreia) -- com 3+ colunas "comiss" no CSV, a terceira
+        # vazava para VAL_BRUTO em silencio (achado de auditoria 2026-08-20).
+        ja_usadas = set(candidatos_comissao.keys()) | {
+            self.deteccoes.get('comissao'), self.deteccoes.get('pcl_comissao')
+        }
         for col in cols:
+            if col in ja_usadas:
+                continue
             col_lower = col.lower()
             if any(x in col_lower for x in ['valor', 'value', 'vl', 'bruto', 'liquido', 'amount']):
                 serie = self._coluna_numerica_candidata(col)
@@ -333,8 +360,14 @@ class Normalizador:
         if not self.deteccoes['comissao']:
             raise ValueError("Primeiro chame detectar_colunas()")
 
-        # Inicializar DataFrame padrão
-        self.df_processado = pd.DataFrame(columns=self.COLUNAS_PADRAO)
+        # Inicializar DataFrame padrão com o MESMO indice de df_original -- um
+        # DataFrame sem indice (0 linhas) faz atribuicao escalar (NUM_BANCO=999,
+        # NOM_BANCO=nome_banco) virar NaN em silencio, porque nao ha linha para
+        # broadcast (achado de auditoria 2026-08-20: NUM_BANCO/NOM_BANCO saiam
+        # sempre vazios).
+        self.df_processado = pd.DataFrame(
+            index=self.df_original.index, columns=self.COLUNAS_PADRAO
+        )
 
         # Mapear valores
         # Banco
@@ -345,9 +378,11 @@ class Normalizador:
         self.df_processado['NUM_PROPOSTA'] = self.df_original[self.deteccoes['proposta']]
         self.df_processado['NUM_CONTRATO'] = self.df_original[self.deteccoes['proposta']]  # Usar proposta como contrato
 
-        # Datas
+        # Datas (dayfirst=True -- ver deteccao acima; a MESMA opcao tem de valer
+        # aqui, senao o parse que decidiu que a coluna e valida na deteccao usa
+        # uma regra diferente do parse que grava o valor final)
         self.df_processado['DAT_CREDITO'] = pd.to_datetime(
-            self.df_original[self.deteccoes['data']]
+            self.df_original[self.deteccoes['data']], dayfirst=True
         ).dt.strftime('%d/%m/%Y')
 
         # Valores (usa a série já convertida para número - a coluna crua
@@ -386,17 +421,30 @@ class Normalizador:
         # .sum() de uma série 100% NaN dá 0,00 (skipna por padrão) e
         # bateria "igual" contra si mesma sem que exista comissão real -
         # foi o falso-positivo real visto ao rodar contra um CSV DIGIO.
-        if self.df_processado['VAL_COMISSAO'].isna().all():
+        comissao_vazia = self.df_processado['VAL_COMISSAO'].isna().all()
+        if comissao_vazia:
             erros.append("  ❌ Coluna de comissão detectada está vazia (100% NaN)")
 
-        # Validação 1: Total de comissão
-        total_original = self._series_numericas[self.deteccoes['comissao']].sum()
-        total_processado = self.df_processado['VAL_COMISSAO'].sum()
+        # Validação 1: Total de comissão (pulada se a Validação 0 já reprovou --
+        # comparar soma de coluna vazia não acrescenta nada, e nos testes que
+        # simulam esse cenário sintético a coluna nem existe em df_original)
+        # Recalcula a partir do CSV bruto (df_original), NAO do cache
+        # self._series_numericas -- comparar a serie cacheada contra ela mesma
+        # (o bug original) sempre bate por definicao, mesmo se mapear_para_padrao
+        # tivesse copiado a coluna errada (achado de auditoria 2026-08-20). Esta
+        # comparacao pega mutacao/desalinhamento de indice entre a deteccao e o
+        # mapeamento; nao pega "coluna errada escolhida em detectar_colunas()" --
+        # isso e responsabilidade de _escolher_valor_comissao(), nao desta validacao.
+        if not comissao_vazia:
+            total_original = self._para_numerico(
+                self.df_original[self.deteccoes['comissao']]
+            ).sum()
+            total_processado = self.df_processado['VAL_COMISSAO'].sum()
 
-        if abs(total_original - total_processado) > 0.01:
-            erros.append(f"  ❌ Soma de comissão não bate: {total_original} → {total_processado}")
-        else:
-            print(f"  ✓ Soma de comissão OK: {total_original:,.2f}")
+            if abs(total_original - total_processado) > 0.01:
+                erros.append(f"  ❌ Soma de comissão não bate: {total_original} → {total_processado}")
+            else:
+                print(f"  ✓ Soma de comissão OK: {total_original:,.2f}")
 
         # Validação 2: Contagem de linhas
         if len(self.df_original) != len(self.df_processado):
@@ -440,19 +488,33 @@ class Normalizador:
 
         return output_path
 
-    def executar(self, output_path=None):
-        """Executa o fluxo completo de normalização."""
+    def executar(self, output_path=None, separador=None, encoding='utf-8-sig'):
+        """Executa o fluxo completo de normalização.
+
+        Salva o XLSX mesmo quando validar() reprova -- o resultado parcial
+        continua util para inspecao manual -- mas o AVISO tem de ser visivel
+        e o chamador da CLI (main()) sai com codigo != 0, porque "salvou" e
+        "salvou validado" sao coisas diferentes (achado de auditoria
+        2026-08-20: antes, os dois pareciam a mesma coisa no exit code).
+
+        sep/encoding sao repassados a ler_csv() -- achado de 3a auditoria:
+        antes ficavam parseados pelo argparse e nunca chegavam ao leitor,
+        deixando --sep/--encoding da CLI inertes.
+        """
         try:
-            self.ler_csv()
+            self.ler_csv(separador=separador, encoding=encoding)
             self.detectar_colunas()
             self.mapear_para_padrao()
-            self.validar()
+            validado = self.validar()
             saida = self.salvar_xlsx(output_path)
 
-            print(f"\n✨ Normalização concluída com sucesso!")
+            if validado:
+                print(f"\n✨ Normalização concluída com sucesso!")
+            else:
+                print(f"\n⚠️  Normalização concluída COM AVISOS DE VALIDAÇÃO -- revise antes de usar.")
             print(f"   Saída: {saida}")
 
-            return saida
+            return saida, validado
         except Exception as e:
             print(f"\n❌ Erro: {e}")
             import traceback
@@ -461,6 +523,8 @@ class Normalizador:
 
 
 def main():
+    # A proteção de encoding do stdout vive no topo do módulo (linha 26) --
+    # cobre quem importa a classe direto, não só quem chama a CLI.
     parser = argparse.ArgumentParser(
         description='Normalizar CSV de banco para modelo PROCESSADO padrão'
     )
@@ -468,16 +532,14 @@ def main():
     parser.add_argument('banco', help='Nome do banco (ex: DIGIO, SANTANDER)')
     parser.add_argument('--output', '-o', help='Caminho de saída XLSX (padrão: auto)')
     parser.add_argument('--sep', help='Separador do CSV (padrão: auto-detecta)')
-    parser.add_argument('--encoding', default='utf-8', help='Encoding (padrão: utf-8)')
+    parser.add_argument('--encoding', default='utf-8-sig', help='Encoding (padrão: utf-8-sig)')
 
     args = parser.parse_args()
 
     normalizador = Normalizador(args.arquivo, args.banco)
-    normalizador.ler_csv(encoding=args.encoding, separador=args.sep)
-    normalizador.detectar_colunas()
-    normalizador.mapear_para_padrao()
-    normalizador.validar()
-    normalizador.salvar_xlsx(args.output)
+    _, validado = normalizador.executar(args.output, separador=args.sep, encoding=args.encoding)
+    if not validado:
+        sys.exit(2)  # salvou, mas com avisos de validacao -- distinto de erro (1) e sucesso (0)
 
 
 if __name__ == '__main__':

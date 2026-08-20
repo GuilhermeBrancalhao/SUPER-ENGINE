@@ -39,3 +39,15 @@ def test_ausencia_de_fonte_de_evidencia_so_pode_rebaixar_nunca_subir():
 def test_baixa_similaridade_sem_match_exato_e_baixa():
     ev = Evidencia(match_exato_valor=False, similaridade_nome=0.1)
     assert classificar(ev) is Confianca.BAIXA
+
+
+def test_dominancia_fraca_nao_promove_a_alta_mesmo_com_volume_alto():
+    """Achado da 3a auditoria: volume alto sozinho nao pode bastar -- e
+    preciso volume E dominancia. Ocorrencias altas com dominancia fraca
+    (fornecedor aparece muito, mas dividido entre destinos diferentes) nao
+    e' historico forte."""
+    ev = Evidencia(
+        match_exato_valor=False, similaridade_nome=0.3,
+        ocorrencias_historicas=6, dominancia_historica=0.3,
+    )
+    assert classificar(ev) is not Confianca.ALTA

@@ -4,7 +4,7 @@ volume_nome: CONCILIACAO-CONTAS
 tipo: ENGINE
 secao: 12-Exemplos
 status: RASCUNHO
-atualizado_em: 2026-08-03
+atualizado_em: 2026-08-20
 ---
 
 # Exemplos
@@ -20,16 +20,21 @@ exatamente no dia 5. O caso está reproduzido em
 no teste `test_lancamento_com_data_retroativa_fecha_o_dia_correto_quando_chega`, e ilustra a regra
 central de `07-Regras.md`: o que importa é a data do fato, não a data em que o dado chegou.
 
-## Caso 2 — boilerplate quase engana o casamento
+## Caso 2 — boilerplate engana o casamento se não for descontado
 
-Dois títulos abertos têm a mesma descrição de origem, "COMPRA NACIONAL DEBIT", seguida de nomes
-de fornecedor diferentes — um posto de padaria, uma farmácia. Um movimento bancário chega com a
-descrição da farmácia. Comparando o texto bruto, as duas descrições de título parecem quase
-igualmente próximas do movimento, porque o prefixo comum domina a métrica de similaridade.
-Descontando o vocabulário genérico antes de comparar — o que `casar()` faz por padrão — o
-casamento correto (farmácia) fica evidente, porque só os tokens que identificam de fato o
-fornecedor entram na conta. Ver
-[`test_boilerplate_nao_derruba_a_identificacao_de_fornecedores_diferentes`](../exemplos/45-conciliacao-contas/tests/test_casamento.py).
+Um título aberto (T1, errado) carrega o prefixo genérico bancário inteiro — "PAGAMENTO
+RECEBIMENTO TRANSFERENCIA TARIFA COMPRA NACIONAL DEBITO CREDITO CARTAO BANCO LTDA" — seguido do
+nome real do fornecedor (padaria); outro título (T2, correto) tem só o nome real do fornecedor
+(farmácia), sem boilerplate nenhum. O movimento bancário chega com o mesmo prefixo genérico de
+T1 seguido do nome da farmácia. Comparando o texto bruto (sem descontar vocabulário genérico),
+o movimento parece muito mais parecido com T1 — o prefixo compartilhado, sendo enorme, domina a
+métrica de similaridade e supera de longe a diferença real de nome. Descontando o vocabulário
+genérico antes de comparar — o que `casar()` faz por padrão — sobra só o nome real de cada lado,
+e o casamento correto (farmácia, T2) vence. `test_boilerplate_e_load_bearing`
+(`../exemplos/45-conciliacao-contas/tests/test_casamento.py`) prova isso na prática: esvaziar o
+conjunto de boilerplate muda o vencedor de T2 para T1, confirmando que o desconto realmente
+decide o resultado — achado de auditoria de 2026-08-20, que encontrou a versão anterior deste
+teste citando boilerplate como prova sem de fato depender dele.
 
 ## Caso 3 — dois valores redondos iguais, uma é duplicata e a outra não
 

@@ -31,7 +31,7 @@ casar por nome e valor, e forçar um tipo único faria um dos dois carregar camp
 `Evidencia(match_exato_valor: bool, similaridade_nome: float, ocorrencias_historicas: int = 0,
 dominancia_historica: float = 0.0)` — os dois últimos campos têm default zero de propósito: um
 chamador que não tem acesso a histórico simplesmente não os preenche, e a ausência já produz a
-degradação seguro descrita em `07-Regras.md`. `Confianca` é um `Enum` de três valores (`ALTA`,
+degradação segura descrita em `07-Regras.md`. `Confianca` é um `Enum` de três valores (`ALTA`,
 `MEDIA`, `BAIXA`), nunca um booleano — um booleano esconderia a diferença entre "seguro escrever"
 e "seguro descartar", que são respostas diferentes.
 

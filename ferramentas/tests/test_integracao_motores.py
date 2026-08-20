@@ -29,6 +29,9 @@ class TestCarregamentoMotores:
         assert engine_vivo.MOTORES_POR_FASE["PLANO"] == [
             "arquitetar-sistema",
             "materializar-ideia",
+            "conciliar-dados",
+            "construir-automacao-cli",
+            "integrar-api-externa",
         ]
         assert engine_vivo.MOTORES_POR_FASE["REVISAO"] == [
             "revisar-codigo",
@@ -38,6 +41,9 @@ class TestCarregamentoMotores:
         assert engine_vivo.MOTORES_POR_FASE["BUILD"] == [
             "materializar-ideia",
             "revisar-codigo",
+            "conciliar-dados",
+            "construir-automacao-cli",
+            "integrar-api-externa",
         ]
 
     def test_ler_descricao_motor_existe(self, tmp_path):

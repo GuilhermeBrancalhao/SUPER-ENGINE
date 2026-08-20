@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 17-Conclusao
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Conclusão
@@ -26,8 +26,10 @@ nenhum sinal visível se ninguém verificar a soma.
 O volume está estruturalmente mais completo do que quando a auditoria de 2026-08-04 o classificou
 como "parcial" com 41 violações — a citação de teste incorreta foi corrigida, e as 18 seções
 foram reescritas com prosa real em vez de esqueleto herdado de outro domínio. Ainda assim, o
-`status` no front-matter permanece `RASCUNHO`: falta cobertura contra mais de um banco, falta
-corrigir o bug conhecido de BOM UTF-8, e falta a auditoria por outro modelo exigida pela
-Definição de PRONTO em `00-INTRODUCAO/Convencoes.md`. Gravar `PRONTO` antes disso mentiria sobre
+`status` no front-matter permanece `RASCUNHO`: falta cobertura real contra mais de um banco (o
+bug de BOM UTF-8 já está corrigido desde 2026-08-04 — outras seções deste volume ainda diziam o
+contrário até a auditoria de 2026-08-20 corrigir a inconsistência), e falta a auditoria por
+outro modelo exigida pela Definição de PRONTO em `00-INTRODUCAO/Convencoes.md`. Gravar `PRONTO`
+antes disso mentiria sobre
 o próprio estado do acervo, exatamente o defeito que motivou remover os dez volumes esqueleto que
 existiam ao lado deste.

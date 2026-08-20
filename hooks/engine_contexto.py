@@ -78,9 +78,15 @@ except ImportError:
 MOTORES_POR_FASE = {
     "DESCOBERTA": [],
     "ANALISE": [],
-    "PLANO": ["arquitetar-sistema", "materializar-ideia"],
+    "PLANO": [
+        "arquitetar-sistema", "materializar-ideia",
+        "conciliar-dados", "construir-automacao-cli", "integrar-api-externa",
+    ],
     "EVOLUCAO": ["arquitetar-sistema"],
-    "BUILD": ["materializar-ideia", "revisar-codigo"],
+    "BUILD": [
+        "materializar-ideia", "revisar-codigo",
+        "conciliar-dados", "construir-automacao-cli", "integrar-api-externa",
+    ],
     "TESTE": [],
     "REVISAO": ["revisar-codigo", "otimizar-performance", "gauntlet-loop"],
     "DOC": ["diagramar", "gauntlet-loop"],

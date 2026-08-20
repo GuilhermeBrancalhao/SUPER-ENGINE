@@ -25,9 +25,14 @@ por risco de escrita errada, o trade-off oposto ao que o volume defende.
 
 **Taxa de falso positivo de escrita automática.** Dos itens escritos com confiança ALTA, quantos
 foram posteriormente revertidos por decisão humana. Fonte: cruzamento entre a trilha
-(`trilha.historico()`) e o registro de reversões do sistema contábil (fora deste volume). Esta é
-a métrica de segurança: o alvo declarado é zero, e qualquer valor acima de zero é motivo de
-revisão imediata dos limiares em `confianca.py`, não de tolerância.
+(`trilha.historico()`) e o registro de reversões do sistema contábil (fora deste volume). A
+trilha não precisa carregar o nível de confiança em cada registro para essa métrica ser
+computável: por invariante de projeto (`07-Regras.md`, "só confiança ALTA escreve sozinha"), a
+ÚNICA forma de uma chave chegar a `trilha.registrar()` é ter sido classificada ALTA primeiro —
+então **todo** registro em `trilha.historico()` já é, por construção, uma escrita de confiança
+ALTA, e o numerador é só contar quantas dessas chaves aparecem no registro de reversão externo.
+Esta é a métrica de segurança: o alvo declarado é zero, e qualquer valor acima de zero é motivo
+de revisão imediata dos limiares em `confianca.py`, não de tolerância.
 
 **Tempo entre o dia do movimento e o dia do fechamento da âncora.** Mede o atraso típico entre um
 fato acontecer no banco e o motor conseguir confirmar que o saldo bate — relevante porque

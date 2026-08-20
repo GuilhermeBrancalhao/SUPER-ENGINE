@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 14-Metricas
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Métricas
@@ -16,9 +16,9 @@ justamente o comportamento que `07-Regras.md` defende: falhar explicitamente em 
 errado em silêncio.
 
 **Cobertura de bancos testados contra CSV real, sobre o total de bancos em produção.** Hoje: 1
-de 40+ (DIGIO, dois arquivos — um funcional, um com o bug de BOM pendente descrito em
-`12-Exemplos.md`). Esta é a métrica mais honesta sobre o estado real deste volume: a lógica de
-detecção foi validada uma vez, não quarenta.
+de 40+ (DIGIO, dois arquivos — um funcional, um que revelou o bug de BOM descrito em
+`12-Exemplos.md`, corrigido em 2026-08-04). Esta é a métrica mais honesta sobre o estado real
+deste volume: a lógica de detecção foi validada contra um banco real, não quarenta.
 
 **Divergência entre `VAL_COMISSAO` e `PCL_COMISSAO * VAL_BASE_COMISSAO`, quando os três campos
 existem.** Não é uma validação que o script roda hoje — é uma métrica que poderia ser calculada

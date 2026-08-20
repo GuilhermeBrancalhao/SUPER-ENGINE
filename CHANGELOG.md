@@ -5,6 +5,36 @@
 
 ---
 
+## 2026-08-20 — Dois volumes de acervo-controladoria alcançam PRONTO
+
+`45-CONCILIACAO-CONTAS` e `54-INTEGRACAO-ERP` passam de `RASCUNHO` para `PRONTO`
+(gates 1-3 da Definição de PRONTO cumpridos: validação mecânica, `pytest`, e
+auditoria formal por modelo independente com `media ≥ 8,0` e nenhuma seção
+`< 6`). Três rodadas de auditoria independente (Opus 5) encontraram bugs reais
+de código a cada rodada, não só de documentação — corrigidos por mutação
+verificada, não por leitura:
+
+- `45-CONCILIACAO-CONTAS`: teste do ramo `Confianca.MEDIA` reescrito para
+  exercer o ramo de verdade (era cosmético — testava o ramo `BAIXA` com nome e
+  docstring do `MEDIA`); mutantes mortos para corte de data da âncora, limiar
+  de similaridade, filtro de token curto e dominância histórica fraca; suíte
+  final com 31 testes. Auditorias em
+  `acervo-controladoria/auditorias/VOL-45-auditoria-2026-08-20{,-v2,-v3}.md`.
+- `54-INTEGRACAO-ERP`: `DAT_CREDITO` corrigido para não trocar dia por mês
+  (`dayfirst=True` nos dois pontos de parse); exceção genérica de data
+  estreitada; terceira coluna candidata a comissão deixou de vazar para
+  `VAL_BRUTO`; `executar()`/`main()` passaram a propagar reprovação de
+  `validar()` como exit code distinto (2); flags `--sep`/`--encoding` da CLI,
+  antes aceitas e ignoradas em silêncio, agora chegam a `ler_csv()`; suíte
+  final com 18 testes. Auditorias em
+  `acervo-controladoria/auditorias/VOL-54-auditoria-2026-08-20{,-v2,-v3}.md`.
+
+Suíte completa de `acervo-controladoria/exemplos/` (49 testes) e
+`ferramentas.validar` para os dois volumes verificados verdes antes do
+registro.
+
+---
+
 ## 2026-08-04 (3) — O cartão de contexto só funcionava no repositório do autor
 
 ### 1. Duas raízes tratadas como uma (o defeito mais grave desta série)

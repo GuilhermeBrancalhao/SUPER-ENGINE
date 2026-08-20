@@ -4,7 +4,7 @@ volume_nome: CONCILIACAO-CONTAS
 tipo: ENGINE
 secao: 07-Regras
 status: RASCUNHO
-atualizado_em: 2026-08-03
+atualizado_em: 2026-08-20
 ---
 
 # Regras
@@ -28,11 +28,18 @@ nunca valor isolado. Dois movimentos legítimos podem compartilhar o mesmo valor
 duplicado real também compartilha o mesmo valor absoluto que o original. Decidir por valor
 sozinho garante falso positivo em qualquer conta com movimentação redonda recorrente.
 
-**A trilha local é a única fonte de verdade sobre "já processado".** Um índice em sistema
-externo pode apagar ou mudar o campo usado como chave depois da própria escrita que ele
-registrou — consultar esse índice para decidir idempotência produz falso negativo sistemático
-(o item some do índice, o motor tenta escrever de novo). A trilha é local, append-only, e
-consultada antes de qualquer índice remoto.
+**A trilha local é a única fonte de verdade sobre "já processado" — para o que o motor decidiu
+escrever sozinho.** Um índice em sistema externo pode apagar ou mudar o campo usado como chave
+depois da própria escrita que ele registrou — consultar esse índice para decidir idempotência
+produz falso negativo sistemático (o item some do índice, o motor tenta escrever de novo). A
+trilha é local, append-only, e consultada antes de qualquer índice remoto.
+
+**Escopo desta garantia, precisado em auditoria de 2026-08-20:** a trilha só recebe registro de
+escrita ALTA automática (`06-Fluxogramas.md`). Uma pendência resolvida por decisão HUMANA
+(destino `PendenciaHumana`) não passa por `trilha.registrar()` — quem compõe o motor em
+produção precisa de um segundo rastro para decisões humanas, se quiser que a próxima execução
+também saiba delas. Este volume não resolve esse rastro; só garante que o que ELE ESCREVE
+sozinho nunca duplica.
 
 **Só confiança ALTA escreve sozinha.** Toda decisão MEDIA ou BAIXA vira pendência para revisão
 humana — nunca aproximação, nunca "fecha por enquanto e corrige depois". A ausência de uma fonte

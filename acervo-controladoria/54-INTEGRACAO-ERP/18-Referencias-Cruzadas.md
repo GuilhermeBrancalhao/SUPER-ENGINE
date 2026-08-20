@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 18-Referencias-Cruzadas
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Referências Cruzadas
@@ -26,7 +26,7 @@ vizinhança real, em prosa:
 - [`../ESTADO.md`](../ESTADO.md) — a auditoria de 2026-08-04 que classificou este volume como "parcial" e motivou esta reescrita
 - [`../exemplos/54-integracao-erp/normalizar.py`](../exemplos/54-integracao-erp/normalizar.py) — o normalizador
 - [`../exemplos/54-integracao-erp/MODELO_UNIVERSAL.md`](../exemplos/54-integracao-erp/MODELO_UNIVERSAL.md) — o modelo `PROCESSADO` documentado
-- [`../exemplos/54-integracao-erp/tests/test_normalizar.py`](../exemplos/54-integracao-erp/tests/test_normalizar.py) — os 7 testes
+- [`../exemplos/54-integracao-erp/tests/test_normalizar.py`](../exemplos/54-integracao-erp/tests/test_normalizar.py) — os 16 testes
 
 ## Navegação interna
 

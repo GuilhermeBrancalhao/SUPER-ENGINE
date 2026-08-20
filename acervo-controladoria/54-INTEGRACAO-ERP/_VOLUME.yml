@@ -1,7 +1,7 @@
 volume: "54"
 nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
-status: RASCUNHO
+status: PRONTO
 perecivel: false
 depende_de: []
 escopo: Integracao com ERP (declarada, sem implementacao ainda) e normalizacao de CSV de exportacao de banco/fintech sem API (implementado e testado contra dado real - normalizar.py, 40+ bancos, deteccao automatica de coluna critica por padrao de nome).

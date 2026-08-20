@@ -4,13 +4,16 @@ volume_nome: CONCILIACAO-CONTAS
 tipo: ENGINE
 secao: 11-Implementacao
 status: RASCUNHO
-atualizado_em: 2026-08-03
+atualizado_em: 2026-08-20
 ---
 
 # Implementação
 
-O motor são cinco arquivos de biblioteca padrão, sem dependência externa, com vinte e três
-testes ao lado. A ordem de leitura é a ordem de dependência conceitual — âncora, casamento,
+O motor são cinco arquivos de biblioteca padrão, sem dependência externa, com trinta
+testes ao lado (atualizado em 2026-08-20, segunda rodada de auditoria; ver `13-Testes.md` para
+a contagem por arquivo — nunca repetir o número aqui sem conferir contra `pytest --collect-only`,
+foi exatamente o tipo de erro que a auditoria de 2026-08-20 encontrou nesta mesma frase). A
+ordem de leitura é a ordem de dependência conceitual — âncora, casamento,
 confiança, guarda, trilha — mesmo que nenhum módulo importe o anterior diretamente.
 
 <!-- exemplo: exemplos/45-conciliacao-contas/ancora.py -->
@@ -55,8 +58,16 @@ recorrente com valor variável — o teste que fixa esse comportamento é
 
 São camadas independentes de propósito: a guarda decide antes de escrever ("essa chave já foi
 vista?"), a trilha registra depois de escrever e recusa uma segunda escrita da mesma chave
-levantando exceção em vez de ignorar. Ter as duas não é redundância — a guarda pode ser
-reconstruída do zero a cada execução (memória volátil), enquanto a trilha é o registro
-persistente que sobrevive entre execuções. Um motor real usa a guarda para decisão em memória
-dentro de um lote, e a trilha como o registro que a próxima execução consulta para saber o que
-já foi feito antes.
+levantando exceção em vez de ignorar. Ter as duas não é redundância — as duas são voláteis
+dentro de UMA execução, mas com papéis diferentes: a guarda é descartável a qualquer momento
+sem perda (reconstruível do zero, decisão de lote), enquanto a trilha é o que não pode ser
+perdido no MEIO de uma execução (recusa duplicata assim que ocorre, não só no fim).
+
+**Correção registrada em 2026-08-20 (achado de auditoria):** `exemplos/45-conciliacao-contas/
+trilha.py` guarda `_registros`/`_chaves` só em memória de processo — não sobrevive ao processo
+terminar. Isto é o exemplo de referência, não a implementação de produção: um motor real que
+precisa que a trilha sobreviva ENTRE execuções (para a próxima chamada não reprocessar o que a
+anterior já escreveu) precisa persistir esses dois estados — arquivo append-only, banco, ou
+equivalente — como responsabilidade de quem compõe o motor, fora do escopo desta classe. A
+classe `Trilha` aqui documenta o CONTRATO (recusar duplicata, nunca ignorar em silêncio), não a
+garantia de durabilidade entre processos.

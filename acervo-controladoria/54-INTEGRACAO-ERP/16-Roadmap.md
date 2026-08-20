@@ -4,7 +4,7 @@ volume_nome: INTEGRACAO-ERP
 tipo: ARQUITETURA
 secao: 16-Roadmap
 status: RASCUNHO
-atualizado_em: 2026-08-04
+atualizado_em: 2026-08-20
 ---
 
 # Roadmap
@@ -15,9 +15,11 @@ Conector de API de ERP (SAP, Oracle, Omie, IFS) — hoje só intenção declarad
 real que justifique a implementação, já que nenhum banco de comissão trabalhado neste projeto
 expõe API.
 
-Teste contra CSVs reais de outros bancos (hoje testado com padrões sintéticos de 6 bancos —
-DIGIO real + SANTANDER, ITAÚ, CAIXA, BRADESCO, NUBANK, BTG sintéticos). Um CSV real de um banco
-novo pode revelar peculiaridades que o teste sintético não previu — como aconteceu com o DIGIO,
+Teste contra CSVs de outros bancos — hoje só DIGIO (real) está testado. Um item de checklist
+anterior afirmava padrões sintéticos de SANTANDER/ITAÚ/CAIXA/BRADESCO/NUBANK/BTG; auditoria de
+2026-08-20 não achou vestígio desses testes na suíte real, e o item foi corrigido (ver
+`15-Checklist.md`). Isso continua pendente de verdade, não resolvido. Um CSV real de um banco
+novo pode revelar peculiaridades que teste sintético nenhum previu — como aconteceu com o DIGIO,
 que revelou tanto o bug de parsing numérico brasileiro quanto o de coluna única silenciosa.
 
 ## O que este volume assume que pode mudar
@@ -30,7 +32,7 @@ novo, seguindo o mesmo padrão que corrigiu o bug do percentual.
 
 ## Dívida técnica registrada, não deste volume especificamente
 
-Os 30 testes de `acervo-controladoria/exemplos/` (os 7 deste volume mais os 23 de
+Os 49 testes de `acervo-controladoria/exemplos/` (os 18 deste volume mais os 31 de
 `45-CONCILIACAO-CONTAS`) não são coletados por nenhuma suíte automática de `pytest` — ver
 `13-Testes.md`. Resolver isso é do repositório como um todo, não deste volume isolado, mas fica
 registrado aqui porque afeta diretamente a confiança que se pode ter em "os testes passam".
