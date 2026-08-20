@@ -166,7 +166,7 @@ Confirme com:
 claude plugin details engine
 ```
 
-Você deve ver `Skills (2)`, `Agents (9)` e `Hooks (5)`.
+Você deve ver `Skills (3)`, `Agents (9)` e `Hooks (5)`.
 
 ## Uso
 
@@ -184,6 +184,12 @@ O motor entra em DESCOBERTA, e a partir daí o cartão de estado aparece a cada 
 | `/engine:engine relatorio` | relatório do ciclo (ou de uma fase) a partir da trilha |
 | `/engine:engine retomar` | reconstrói o estado numa sessão nova |
 | `/engine:engine off` | desliga e gera o relatório do ciclo |
+| `/engine:construir <objetivo>` | porta de entrada amigável — equivale a `/engine:engine <objetivo>` |
+| `/engine:ai-os` | painel de despacho: pergunta o que você quer fazer e roteia para o motor certo, sem abrir o ciclo completo em fases |
+
+Use `/ai-os` quando já sabe qual pedaço do trabalho quer (revisar, otimizar, conciliar
+dados, automatizar) e não precisa do ciclo inteiro com porta de aprovação; use
+`/engine`/`/construir` para conduzir um projeto de ponta a ponta.
 
 O modo seco é o jeito de conhecer o motor sem risco: ele percorre as fases, apresenta o
 plano e relata, mas o classificador de risco rebaixa toda escrita para travada.
