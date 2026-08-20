@@ -20,11 +20,11 @@
 | `openpyxl-xlwings` | arquiteto, implementador, revisor | 3 |
 | `ui-ux-producao` | arquiteto, designer, implementador, revisor | 3 |
 
-Elenco completo: 17 cartões. `openpyxl-xlwings` tem `detectar: []` de propósito — não existe
-âncora forte de arquivo para "este projeto usa openpyxl/xlwings" (ver a nota no próprio
-cartão), então ele nunca dispara sozinho; o `cartografo` carrega à mão quando confirma
-manipulação de Excel real na ANÁLISE. `ui-ux-producao` reusa o `detectar:` de `ui-ux` — os
-dois co-carregam sempre juntos, de propósito (piso de acessibilidade + qualidade de produção).
+Elenco completo: 17 cartões. `openpyxl-xlwings` detecta `*.xlsm`/`*.xlsb` como âncoras fortes
+de automação em planilha; para `.xlsx` puro, o `cartografo` carrega o cartão à mão quando
+confirma manipulação de Excel real na ANÁLISE. `ui-ux-producao` espelha os padrões de detecção
+de `ui-ux` — os dois co-carregam sempre juntos, de propósito (piso de acessibilidade + qualidade
+de produção); se a lista evoluir, os dois cartões devem ser atualizados.
 
 Os `papeis` de `pytest` e `ui-ux` foram revisados na Fase 2
 (adicionado `testador` em `pytest` e `designer` em `ui-ux`, coerente com o que já valia para

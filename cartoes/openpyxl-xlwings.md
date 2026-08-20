@@ -16,8 +16,10 @@ esse padrão na ANÁLISE (leitura/gravação de Excel real como parte do fluxo d
 carregue este cartão à mão mesmo sem `.xlsm`/`.xlsb` presente.
 
 ## Convenções
-- Leitura é sempre `openpyxl.load_workbook(caminho, read_only=True, data_only=True)` — nunca
-  abrir para leitura o mesmo arquivo que será gravado por COM no mesmo processo.
+- Para `.xlsm`, leitura sem edição usa `openpyxl.load_workbook(caminho, read_only=True,
+  data_only=True)`; `.xlsb` não é suportado pelo `openpyxl` e deve ser lido por `xlwings`/COM
+  (ou por uma conversão explícita e controlada). Em ambos os casos, nunca abrir para leitura o
+  mesmo arquivo que será gravado por COM no mesmo processo.
 - Gravação que precisa preservar fórmula, gráfico ou tabela dinâmica vai por `xlwings`/COM
   (Excel real rodando), nunca `openpyxl.save()` sobre o arquivo inteiro — `openpyxl` não lê
   nem escreve pivot table, e regrava fórmula como valor calculado, não como fórmula viva.
@@ -44,6 +46,8 @@ carregue este cartão à mão mesmo sem `.xlsm`/`.xlsb` presente.
 - `openpyxl` com `data_only=True` só devolve o **último valor calculado salvo pelo Excel** —
   se o arquivo nunca foi recalculado/salvo pelo Excel de verdade, a leitura devolve `None` em
   vez do valor da fórmula.
+- `data_only=True` serve para conferir valores calculados; quando a revisão precisa inspecionar
+  fórmulas, abra uma segunda visão com `data_only=False`.
 
 ## Comandos
 - Suíte: `python -m pytest -q` (a camada de regra pura é testável; a camada Excel/COM em si

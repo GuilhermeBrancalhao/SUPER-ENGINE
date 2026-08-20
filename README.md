@@ -50,9 +50,9 @@ medida. O cartão de cada turno lista os motores consultáveis da fase atual (no
 
 | Fase | Motores consultáveis |
 |---|---|
-| PLANO | `arquitetar-sistema`, `materializar-ideia` |
+| PLANO | `arquitetar-sistema`, `materializar-ideia`, `conciliar-dados`, `construir-automacao-cli`, `integrar-api-externa` |
 | EVOLUÇÃO | `arquitetar-sistema` |
-| BUILD | `materializar-ideia`, `revisar-codigo` |
+| BUILD | `materializar-ideia`, `revisar-codigo`, `conciliar-dados`, `construir-automacao-cli`, `integrar-api-externa` |
 | REVISÃO | `revisar-codigo`, `otimizar-performance`, `gauntlet-loop` |
 | DOC | `diagramar`, `gauntlet-loop` |
 
