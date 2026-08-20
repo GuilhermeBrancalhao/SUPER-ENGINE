@@ -35,12 +35,13 @@ espera.
 escrita ampla; quem revisa não conserta em silêncio, e essa garantia é estrutural (o `revisor`
 não recebe ferramenta de execução), não uma instrução que ele possa contrariar.
 
-**Doze cartões de tecnologia**, carregados sob demanda conforme a stack detectada no projeto.
+**Dezessete cartões de tecnologia**, carregados sob demanda conforme a stack detectada no projeto.
 Tecnologia nova custa um arquivo de ~60 linhas, não um agente novo.
 
-**Seis motores consultáveis**, de duas naturezas diferentes: cinco motores de critério
+**Nove motores consultáveis**, de duas naturezas diferentes: oito motores de critério
 próprios, em `motores/` — `revisar-codigo`, `otimizar-performance`, `arquitetar-sistema`,
-`materializar-ideia`, `diagramar` —, mais `gauntlet-loop`, uma **entrada-ponteiro** para uma
+`materializar-ideia`, `diagramar`, `conciliar-dados`, `construir-automacao-cli` e
+`integrar-api-externa` —, mais `gauntlet-loop`, uma **entrada-ponteiro** para uma
 skill externa (instalada à parte no ambiente de quem conduz o ciclo, não mantida por este
 repositório) que, consultada em REVISAO e DOC, acrescenta crítica cega contra barra externa
 quando o entregável já passa em teste e critério funcional mas a qualidade em si precisa ser
@@ -84,7 +85,7 @@ marcado `PRONTO` enquanto a fonte dizia `RASCUNHO`, e a nunca entregar `03-DISCO
 As duas suítes rodam separadas, porque cada uma tem o seu próprio pacote `ferramentas`:
 
 ```bash
-py -m pytest                  # motor  — 844 testes
+py -m pytest                  # motor  — 847 testes
 cd acervo && py -m pytest     # acervo — 789 testes
 ```
 
@@ -194,9 +195,9 @@ a cada push — antes disso não havia CI nenhuma, e "os testes passam" era uma
 afirmação sobre a última vez que alguém os rodou à mão.
 
 ```bash
-py -m pytest                                   # motor          — 844 testes
+py -m pytest                                   # motor          — 847 testes
 cd acervo && py -m pytest                      # acervo         — 789 testes
-py -m pytest acervo-controladoria/exemplos     # controladoria  —  33 testes
+py -m pytest acervo-controladoria/exemplos     # controladoria  —  49 testes
 ```
 
 O motor usa **apenas a biblioteca padrão do Python** — nenhuma dependência de
@@ -212,10 +213,11 @@ python aceite/simular_turnos.py
 
 ## Estado
 
-**Fases 1 e 2 completas**, mescladas em `master`. Estão no repositório e cobertos por testes:
+**Fases 1 a 5 completas**, mescladas em `master`. Estão no repositório e cobertos por testes:
 `ferramentas/` (configuração, classificador de risco, máquina de fases, detecção de stack,
 trilha, relatório e a CLI), os cinco hooks (`PreToolUse`, `UserPromptSubmit`, `PostToolUse`,
-`PreCompact`, `Stop`), a skill, os nove papéis, os doze cartões e o empacotamento como plugin.
+`PreCompact`, `Stop`), a skill, os nove papéis, os dezessete cartões, os motores consultáveis e o
+empacotamento como plugin.
 
 **O que já foi observado em sessão real.** Em 2026-07-31 o plugin foi instalado e rodou
 dentro de uma sessão real do Claude Code, e três coisas foram observadas — não simuladas:
